@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrate</title>
+  <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootrstap.min.css">
+</head>
+<body>
+<form th:action="@{/process_register_admin}" th:object="${admin}" method="post">
+  <table>
+    <tr>
+      <td>Email: </td>
+      <td><input type="email" th:field="*{email}" required></td>
+    </tr>
+    <tr>
+      <td>Contraseña: </td>
+      <td><input type="password" th:field="*{pass}" required></td>
+    </tr>
+    <tr>
+      <td><input type="submit" value="Enviar"></td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

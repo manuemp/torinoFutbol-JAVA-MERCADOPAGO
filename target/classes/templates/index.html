@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/general.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/modal.css}">
+    <title>Torino Fútbol: Reservá las mejores canchas</title>
+    <style th:inline="text">
+
+        #sintetico{
+            background-image: url([[@{/imgs/sinteticoHD.jpeg}]]);
+        }
+
+        .bienvenido{
+            background-image: url([[@{/imgs/jugador_pelota2.jpeg}]]);
+        }
+
+        @media(max-width: 650px) {
+            .bienvenido {
+                font-size: 2.5rem;
+                background-image: url([[@{/imgs/jugador_pelota7.png}]]);
+            }
+        }
+
+        @media(max-width: 425px){
+            #texto_niveles{
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<span class="modal_background"></span>
+<div th:if="${mensaje_excepcion}"class="error">
+    [[${mensaje_excepcion}]]
+</div>
+<div th:if="${param.error}" class="error">
+    ¡Usuario o contraseña incorrectos! Intentá nuevamente... <br>
+</div>
+<nav th:replace="fragments/nav :: navOffline"></nav>
+<div th:replace="fragments/nav :: navOfflineResponsive"></div>
+<div th:replace="fragments/nav :: navOfflineDesplegable"></div>
+
+<!--<div id="modal_info_reserva" class="modal">-->
+<!--    <div class="nav_modal">-->
+<!--        <div class="texto_2" style="color: white;"><strong>Tu Reserva</strong></div>-->
+<!--        <div id="cerrar_modal_admin_falta" class="modal_cerrar cerrar">X</div>-->
+<!--    </div>-->
+<!--    <br>-->
+<!--    <span style="color: white" class="texto_2">-->
+<!--        <strong style="margin-left: 20px">Dia:</strong> 11/02/2024 <br>-->
+<!--        <strong style="margin-left: 20px">Hora:</strong> 17:00:00hs <br>-->
+<!--        <strong style="margin-left: 20px">Cancha:</strong> F8 A <br>-->
+<!--        <strong style="margin-left: 20px">Total:</strong> $32.000-->
+<!--    </span>-->
+<!--</div>-->
+
+<main>
+    <!-- MODAL -->
+    <div th:replace="fragments/modal :: modalInicioSesion"></div>
+    <!-- PORTADA -->
+    <h1 class="bienvenido">
+        Buscá tu Cancha. <br>
+        Reservá. <br>
+        Jugá.
+    </h1>
+
+    <div class="info_container">
+        <div class="titulo_1 violeta_claro">Alquilá con nosotros, <br>disfrutá de los beneficios</div><br>
+        <div class="texto_1 violeta_oscuro">
+            En Torino Fútbol premiamos la constancia de nuestros clientes. <br>
+            Registrate, acumulá tus reservas y disfrutá de beneficios en precios y gestiones.
+        </div>
+        <br>
+        <!-- TARJETAS -->
+        <div th:replace="fragments/niveles :: niveles"></div>
+    </div>
+
+    <div th:replace="fragments/faqs :: faqs"></div>
+
+    <div class="info_container">
+        <div class="titulo_1 violeta_claro" style="text-align: center;">Canchas que hacen la diferencia</div><br>
+        <div class="texto_1 violeta_oscuro" style="text-align: center;">Césped sintético profesional<br>Sistemas de drenaje anti-inundación</div>
+    </div>
+
+    <div id="sintetico">
+    </div>
+</main>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
+<script th:src="@{/js/navDesplegable.js}"></script>
+<script>
+
+    let iniciar_sesion_desplegable = document.getElementById("iniciar_sesion_desplegable");
+    let iniciar_sesion = document.getElementById("iniciar_sesion");
+    let modal = document.getElementById("modal_inicio_sesion");
+    let modal_fail = document.getElementById("modal_inicio_sesion_fail");
+    let cerrar_modal = document.querySelectorAll(".modal_cerrar");
+    let modal_background = document.querySelector(".modal_background");
+
+    // window.onbeforeunload = history.pushState(null, null, "index");
+    iniciar_sesion.addEventListener('click', ()=> {
+        modal_background.style.display = "block";
+        modal.style.display = "block";
+    });
+
+    iniciar_sesion_desplegable.addEventListener('click', ()=> {
+        modal_background.style.display = "block";
+        modal.style.display = "block";
+    });
+
+    cerrar_modal.forEach(cerrar =>{
+        cerrar.addEventListener('click', ()=> {
+            modal_background.style.display = "none";
+            modal.style.display = "none";
+            modal_fail.style.display = "none";
+        });
+    })
+
+    //FAQS
+    let preguntas = document.querySelectorAll(".pregunta");
+    preguntas.forEach((pregunta)=>{
+        pregunta.addEventListener('click', ()=>{
+            let respuesta = pregunta.nextElementSibling;
+
+            if(respuesta.style.maxHeight == "0px" || respuesta.style.maxHeight == 0) {
+                pregunta.firstElementChild.style.transform = "rotate(180deg)";
+                respuesta.children[0].style.color = "#3e139c";
+                respuesta.children[0].style.display = "block";
+                respuesta.style.maxHeight = "500px";
+            }
+            else{
+                pregunta.firstElementChild.style.transform = "rotate(0deg)";
+                respuesta.children[0].style.color = "white";
+                respuesta.style.transition = "max-height 0.3s ease-out"
+                respuesta.style.maxHeight = "0px";
+                setTimeout(()=>{
+                    respuesta.children[0].style.display = "none";
+                }, 300)
+            }
+        });
+    })
+</script>

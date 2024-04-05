@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/general.css}">
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+  <link rel="stylesheet" th:href="@{/css/modal.css}">
+  <link rel="stylesheet" th:href="@{/css/usuario_logueado.css}">
+  <title>Torino Fútbol: Reservá las mejores canchas</title>
+  <style th:inline="text">
+
+    #panel_usuario{
+      height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 45px;
+      box-sizing: border-box;
+      background-image: url([[@{/imgs/fondo_contacto5.jpeg}]]);
+      background-repeat: no-repeat;
+      background-size: cover;
+      overflow: scroll;
+    }
+
+    #info_faltas
+    {
+      background-image: url([[@{/imgs/tarjeta_roja.jpg}]]);
+      background-repeat: no-repeat;
+      background-size: contain;
+      padding: 80px 45px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+<nav th:replace="fragments/nav :: navOnline"></nav>
+<nav th:replace="fragments/nav :: navOnlineResponsive"></nav>
+<nav th:replace="fragments/nav :: navOnlineDesplegable"></nav>
+<main>
+
+  <div th:if="${mensaje_exito_reserva}" class="exito">
+    [[${mensaje_exito_reserva}]]
+  </div>
+  <div th:if="${mensaje_error_reserva}" class="error">
+    [[${mensaje_error_reserva}]]
+  </div>
+  <div class="error" th:if="${mensaje_error_mail}">
+    [[${mensaje_error_mail}]]
+  </div>
+
+  <section id="panel_usuario">
+    <article id="usuario">
+      <h1 class="titulo_2" id="titulo_usuario">[[${usuario.nombre}]] [[${usuario.apellido}]]</h1>
+      <br><img th:src="@{/imgs/level2.png}" alt="Icono Falta" class="icono_info"> Nivel: <span style="color:#8650fe" id="nivelUsuario"></span>
+      <br><img th:src="@{/imgs/calendario.png}" alt="Icono Falta" class="icono_info"> Reservas: <span style="color:#8650fe" id="reservasUsuario"></span>
+      <br><img th:src="@{/imgs/check.png}" alt="Icono Falta" class="icono_info"> Asistencias: <span style="color:#8650fe" id="rachaUsuario">[[${usuario.racha}]]</span>
+      <br><img th:src="@{/imgs/falta.png}" alt="Icono Falta" class="icono_info"> Faltas: <span style="color: red;" id="faltasUsuario">[[${usuario.faltas}]]</span>
+    </article>
+    <article id="reservas">
+      <span class="titulo_2" style="color: #8650fe">Tus próximas reservas</span>
+      <div id="container_reservas">
+        <!-- Se carga por JS -->
+      </div>
+    </article>
+  </section>
+
+  <section id="reservas_responsive">
+    <p id="titulo_reservas">Tus próximas reservas</p>
+    <div id="container_reservas_responsive">
+      <!-- Se carga por JS -->
+    </div>
+  </section>
+
+  <section id="contactanos">
+    <div style="font-weight: bold;">Si tenés alguna consulta...</div>
+    <a id="wpp_web_senia" href="https://wa.me/1159807762/?text=Hola!%20Me%20comunico%20por%una%20consulta!" target="_blank"><img src="./imgs/wppLogo.png" id="wpp_logo" alt="Logo Whatsapp">Comunicate con nosotros</a>
+  </section>
+  <section th:replace="fragments/niveles :: niveles"></section>
+  <br>
+  <div style="background: black;">
+    <section id="info_faltas">
+<!--      <div class="titulo_info" style="color: white;">-->
+      <div class="titulo_2 blanco">
+        Evitá la roja
+      </div>
+      <div class="texto_2 blanco" style="text-shadow: 1px 1px 10px black;">
+        Los beneficios que otorgamos exigen un compromiso mutuo. <br>
+        Para mantener tu nivel de beneficios no podés tener más de 3 faltas.<br>
+        Por cada vez que canceles fuera del tiempo reglamentario sumás una falta.
+      </div>
+    </section>
+  </div>
+
+</main>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
+
+<script th:src="@{/js/navDesplegable.js}"></script>
+<script th:src="@{/js/jquery/jquery.min.js}"></script>
+<script th:src="@{/js/nivel.js}"></script>
+<script th:src="@{/js/reservasPendientesUsuario.js}"></script>
+<script th:src="@{/js/datosUsuario.js}"></script>
+<script>
+</script>

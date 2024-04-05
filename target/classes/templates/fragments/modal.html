@@ -1,0 +1,143 @@
+<!--MODAL INICIO DE SESIÓN-->
+<div id="modal_inicio_sesion" th:fragment="modalInicioSesion">
+    <div class="modal_nav">
+        <span class="modal_cerrar">X</span>
+    </div>
+    <div class="modal_main" style="margin: auto;">
+        <p class="modal_titulo">¡Ingresá en Torino Fútbol!</p><br>
+        <span style="font-size: 1rem; color: gray; display: block; margin-top: -15px">admin: admin@torino.com - pass: 1234</span>
+        <form action="/login" method="post">
+            <div class="form_opcion">
+                <label for="txtEmail">Correo Electrónico</label>
+                <input class="modal_input" type="email" id="txtEmail" name="email" required autocomplete="off">
+            </div>
+            <div class="form_opcion">
+                <label for="txtPass">Contraseña</label>
+                <input class="modal_input" type="password" id="txtPass" name="password" required autocomplete="off">
+            </div>
+            <div class="form_opcion">
+                <input class="modal_enviar modal_input" type="submit" value="Iniciar Sesión">
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- ADMIN: BUSCAR RESERVA POR EMAIL -->
+<div id="modal_admin_buscar_email" class="modal_admin" th:fragment="modalAdminBuscarEmail" data-background-modal="email">
+    <nav class="nav_modal">
+        <div class="texto_2 violeta_oscuro"><strong>Buscar reservas por email</strong></div>
+        <div id="cerrar_modal_admin_email" class="modal_cerrar cerrar">X</div>
+    </nav>
+    <br>
+    <input type="text" class="input_admin" id="buscar_reserva_email" placeholder="Email usuario" onkeyup="buscarReservasEmail(this.value)" style="width:200px;">
+    <span id="info_usuario">i</span>
+    <span style="color: #8650fe; font-style: italic" id="cargando_modal_email"></span>
+    <br><br>
+    <table id="tabla_admin_buscar_email">
+        <thead style="background-color:white; position:sticky; z-index:2">
+        <tr class="th_historial">
+            <th class="td_historial email">Email</th>
+            <th class="td_historial dia">Día</th>
+            <th class="td_historial cancha">Cancha</th>
+            <th class="td_historial hora">Hora</th>
+            <th class="td_historial botones"></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+
+<!--ADMIN: BUSCAR RESERVA POR ID-->
+
+<div id="modal_admin_buscar_id" class="modal_admin" th:fragment="modalAdminBuscarID" data-background-modal="id">
+    <nav class="nav_modal">
+        <div class="texto_2 violeta_oscuro"><strong>Buscar reservas por ID</strong></div>
+        <div id="cerrar_modal_admin_id" class="modal_cerrar cerrar">X</div>
+    </nav>
+    <br>
+    <input type="number" class="input_admin" id="buscar_reserva_id" placeholder="ID Usuario" onkeyup="buscarReservasID(this.value)" style="width:200px;">
+    <br><br>
+    <table id="tabla_admin_buscar_id">
+        <thead style="background-color:white; position:sticky; z-index:2">
+        <tr class="th_historial">
+            <th class="td_historial email">Email</th>
+            <th class="td_historial dia">Día</th>
+            <th class="td_historial cancha">Cancha</th>
+            <th class="td_historial hora">Hora</th>
+            <th class="td_historial botones"></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+<!--ADMIN: CONFIRMAR ELIMINAR RESERVA-->
+<div id="modal_admin_confirmar_eliminar" class="modal_admin" th:fragment="modalAdminConfirmarEliminar" data-background-modal="confirmar">
+    <nav class="nav_modal">
+        <div class="texto_2 violeta_oscuro"><strong>¿Desea eliminar la reserva?</strong></div>
+        <div id="cerrar_modal_admin_eliminar" class="modal_cerrar cerrar">X</div>
+    </nav>
+    <br>
+    <div class="texto_2 violeta_oscuro" style="line-height: 1.5;">
+        <strong style="color:crimson">Se eliminará la siguiente reserva:</strong><br>
+        <strong>
+            [ id ] <span id="id_eliminar"></span><br>
+            <span id="usuario_eliminar"></span> <br>
+            <span id="mail_eliminar"></span> <br>
+            <span id="fecha_eliminar"></span><br>
+            <span id="cancha_hora_eliminar"></span><br>
+        </strong>
+    </div>
+    <div class="botonera_modal_admin">
+        <div class="boton_aceptar cerrar" id="aceptar_eliminar">Aceptar</div>
+        <div class="boton_cancelar cerrar">Cancelar</div>
+    </div>
+</div>
+
+<!--ADMIN: CONFIRMAR APLICAR FALTA-->
+<div id="modal_admin_confirmar_falta" class="modal_admin" th:fragment="modalAdminConfirmarFalta" data-background-modal="confirmar">
+    <nav class="nav_modal">
+        <div class="texto_2 violeta_oscuro"><strong>Aplicar Falta</strong></div>
+        <div id="cerrar_modal_admin_falta" class="modal_cerrar cerrar">X</div>
+    </nav>
+    <br>
+    <div class="texto_2 violeta_oscuro" style="line-height: 1.5;">
+        <strong style="color:crimson">¿Desea aplicar una falta al usuario?</strong><br><br>
+        <div style="margin-left: 20px">
+            <strong>
+                <span id="usuario_falta"></span>
+            </strong>
+        </div>
+    </div>
+    <div class="botonera_modal_admin">
+        <div class="boton_aceptar cerrar" id="aceptar_falta">Aceptar</div>
+        <div class="boton_cancelar cerrar">Cancelar</div>
+    </div>
+</div>
+
+
+
+<!--ADMIN - INFO USUARIO-->
+<div id="modal_info_usuario" class="modal_admin" th:fragment="modalAdminInfoUsuario" data-background-modal="info">
+    <div class="nav_modal">
+        <div class="texto_2 violeta_oscuro"><strong>Información de Usuario</strong></div>
+        <div id="cerrar_modal_admin_info" class="modal_cerrar cerrar">X</div>
+    </div>
+    <div>
+        <div style="padding: 15px; line-height: 1.8">
+            <span class="texto_2 violeta_oscuro" style="font-weight:bold;">Nombre: </span><span class="texto_2 violeta_oscuro" id="nombre_info_usuario"></span><br>
+            <span class="texto_2 violeta_oscuro" style="font-weight:bold;">Apellido: </span><span class="texto_2 violeta_oscuro" id="apellido_info_usuario"></span><br>
+            <span class="texto_2 violeta_oscuro" style="font-weight:bold;">Email: </span><span class="texto_2 violeta_oscuro" id="email_info_usuario"></span><br>
+            <span class="texto_2 violeta_oscuro" style="font-weight:bold;">Telefono: </span><span class="texto_2 violeta_oscuro" id="telefono_info_usuario"></span><br>
+            <span class="texto_2 violeta_oscuro" style="font-weight:bold;">Faltas: </span><span class="texto_2 violeta_oscuro" id="faltas_info_usuario"></span><br>
+            <span class="texto_2 violeta_oscuro" style="font-weight:bold;">Racha: </span><span class="texto_2 violeta_oscuro" id="racha_info_usuario"></span><br>
+            <span class="texto_2 violeta_oscuro" style="font-weight:bold;">Nivel: </span><span class="texto_2 violeta_oscuro" id="nivel_info_usuario"></span><br>
+        </div>
+    </div>
+</div>

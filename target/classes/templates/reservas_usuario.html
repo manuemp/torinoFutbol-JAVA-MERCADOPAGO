@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/general.css}">
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+  <link rel="stylesheet" th:href="@{/css/historial.css}">
+  <link rel="stylesheet" th:href="@{/css/historial_usuario.css}">
+  <title>TorinoFútbol: Tu Historial de Reservas</title>
+  <style>
+  </style>
+</head>
+<body>
+
+<nav th:replace="fragments/nav :: navOnline"></nav>
+<nav th:replace="fragments/nav :: navOnlineResponsive"></nav>
+<nav th:replace="fragments/nav :: navOnlineDesplegable"></nav>
+<main>
+  <a th:href="@{/home}"><img th:src="@{/imgs/left_arrow2.png}" alt="Volver" id="arrow"></a>
+  <h1 class="titulo_2 violeta_claro" id="titulo_historial">Tu Historial de Reservas</h1>
+  <article class="historial">
+    <article id="filtros_historial" class="header_historial">
+      <div id="div_filtro">
+        <input type="checkbox" id="checkFaltas">
+        <span id="texto_filtro_faltas">Mostrar solo faltas</span>
+      </div>
+    </article>
+    <table id="tablaReservas">
+      <thead>
+      <tr class="header_historial th_historial">
+        <th class="td_historial">Día</th>
+        <th class="td_historial">Cancha</th>
+        <th class="td_historial">Hora</th>
+      </tr>
+      </thead>
+      <tbody>
+        <th:block th:each="reserva :${reservas}">
+
+        </th:block>
+      </tbody>
+    </table>
+  </article>
+</main>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
+
+<script th:src="@{/js/navDesplegable.js}"></script>
+<script th:src="@{/js/jquery/jquery.min.js}"></script>
+<script th:src="@{/js/historialReservasUsuario.js}"></script>
+<script>
+
+  let checkflag = false;
+  let botonFaltas = document.getElementById("checkFaltas");
+  botonFaltas.addEventListener('click', mostrar_ocultar_faltas);
+
+ function mostrar_ocultar_faltas()
+ {
+   let sin_falta = document.querySelectorAll(".item_historial");
+   checkflag = !checkflag;
+   if(checkflag == true) {
+     sin_falta.forEach((item)=>{
+       item.style.display = "none";
+     })
+   }
+   else {
+     sin_falta.forEach((item)=>{
+       item.style.display = "flex";
+     })
+   }
+ }
+</script>

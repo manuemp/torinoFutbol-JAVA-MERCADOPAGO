@@ -1,0 +1,83 @@
+<!--NAV OFFLINE-->
+
+<nav th:fragment="navOffline">
+    <div class="navSuperior" id="navSuperior_normal">
+        <a th:href="@{/}"><img class="logo" th:src="@{/imgs/torinoLogoBlanco_2.png}" alt="logoTorino"></a>
+        <div>
+            <a class="botonNav" id="iniciar_sesion" href="#">Iniciar Sesión</a>
+            <a class="botonNav" th:href="@{/register}">Registrate</a>
+            <a class="botonNav" th:href="@{/contacto}">Contacto</a>
+        </div>
+    </div>
+</nav>
+
+<div class="navSuperior" id="navSuperior_responsive" th:fragment="navOfflineResponsive">
+    <a th:href="@{/}"><img class="logo" th:src="@{/imgs/torinoLogoBlanco_2.png}" alt="logoTorino"></a>
+    <img class="botonNav" id="boton_desplegable" th:src="@{/imgs/botondesplegable.png}" alt="boton desplegable">
+</div>
+
+<div class="navbar_desplegable" th:fragment="navOfflineDesplegable">
+    <!-- opcion_desplegable -->
+    <a class="botonNav_desplegable" id="iniciar_sesion_desplegable">Iniciar Sesión</a>
+    <a class="botonNav_desplegable" th:href="@{/register}">Registrate</a>
+    <a class="botonNav_desplegable" th:href="@{/contacto}">Contacto</a>
+</div>
+
+<!--NAV ONLINE-->
+
+<nav th:fragment="navOnline">
+    <div class="navSuperior" id="navSuperior_normal">
+        <a th:href="@{/home}"><img class="logo" src="imgs/torinoLogoBlanco_2.png" alt="logoTorino"></a>
+        <div>
+            <a class="botonNav" href="/logout">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <div class="navInferior" id="navInferior_normal">
+        <a class="botonNav" th:href="@{/reservasUsuario}">Mi Historial</a>
+        <a class="botonNav" th:href="@{/hacerReserva}">Hacer Reserva</a>
+        <a class="botonNav" th:href="@{/contacto}">Contacto</a>
+    </div>
+</nav>
+
+<div class="navSuperior" id="navSuperior_responsive" th:fragment="navOnlineResponsive">
+    <a th:href="@{/home}"><img class="logo" src="imgs/torinoLogoBlanco_2.png" alt="logoTorino"></a>
+    <img class="botonNav" id="boton_desplegable" src="imgs/botondesplegable.png" alt="boton desplegable">
+</div>
+
+<div class="navbar_desplegable" th:fragment="navOnlineDesplegable">
+    <a class="botonNav_desplegable" th:href="@{/reservasUsuario}">Mi Historial</a>
+    <a class="botonNav_desplegable" th:href="@{/hacerReserva}">Hacer Reserva</a>
+    <a class="botonNav_desplegable" th:href="@{/contacto}">Contacto</a>
+    <a class="botonNav_desplegable" href="/logout">Cerrar Sesión</a>
+</div>
+
+<!--NAV ADMIN-->
+
+<nav th:fragment="navAdmin">
+    <div class="navSuperior" id="navSuperior_normal">
+        <a th:href="@{/home}"><img class="logo" th:src="@{/imgs/torinoLogoBlanco_2.png}" alt="logoTorino"></a>
+        <div style="display: flex">
+            <div>
+                <a class="botonNav" href="/logout">Cerrar Sesión</a>
+            </div>
+        </div>
+    </div>
+
+<!--    <div class="nav2" id="nav2_normal">-->
+<!--        <a class="opcion" th:href="@{/admin/reservas}">Reservas Pendientes</a>-->
+<!--        <a class="opcion" th:href="@{/admin/historialReservas}">Historial Reservas</a>-->
+<!--    </div>-->
+</nav>
+
+<div class="navSuperior" id="navSuperior_responsive" th:fragment="navAdminResponsive">
+    <a th:href="@{/home}"><img class="logo" th:src="@{/imgs/torinoLogoBlanco_2.png}" alt="logoTorino"></a>
+    <img class="botonNav" id="boton_desplegable" th:src="@{/imgs/botondesplegable.png}" alt="boton desplegable">
+</div>
+
+<div class="navbar_desplegable" th:fragment="navAdminDesplegable">
+<!--    <a class="botonNav_desplegable" th:href="@{/admin/reservas}">Reservas Pendientes</a>-->
+<!--    <a class="botonNav_desplegable" th:href="@{/admin/historialReservas}">Historial Reservas</a>-->
+<!--    <a class="botonNav_desplegable" href="#">Contacto</a>-->
+    <a class="botonNav_desplegable" href="/logout">Cerrar Sesión</a>
+</div>

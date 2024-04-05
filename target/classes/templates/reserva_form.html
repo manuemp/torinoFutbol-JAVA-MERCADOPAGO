@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+  <link rel="stylesheet" th:href="@{/css/general.css}">
+  <link rel="stylesheet" th:href="@{/css/modal.css}">
+  <link rel="stylesheet" th:href="@{/css/historial.css}">
+  <title>Torino Fútbol: Reservá las mejores canchas</title>
+  <style th:inline="text">
+
+    .navbar_desplegable{
+      margin-top: 55px;
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main{
+      flex: 1;
+      padding: 20px;
+    }
+
+    /*select, input, .container{*/
+    /*  height: 35px;*/
+    /*  width: 100%;*/
+    /*  padding: 5px;*/
+    /*  border-radius: 8px;*/
+    /*  margin-top: 10px;*/
+    /*  background-color: whitesmoke;*/
+    /*  font-size: 20px;*/
+    /*}*/
+
+    .container{
+        height: 35px;
+        width: 100%;
+        padding: 5px;
+        border-radius: 8px;
+        margin-top: 10px;
+        background-color: whitesmoke;
+        font-size: 20px;
+    }
+
+    input{
+      border: none;
+    }
+
+    form, section{
+      width: 450px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      /* align-content: center; */
+      align-items: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 5px 6px 7px 1px lightgray;
+      font-size: 20px;
+      position: relative;
+      box-sizing: border-box;
+      margin-top: 20px;
+    }
+
+    .btn_reservar{
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn_bloqueado{
+      background: gainsboro;
+      color: gray;
+    }
+
+    .btn_habilitado{
+      background: rgb(35,211,102);
+      color: white;
+      /*cursor: pointer;*/
+      /*font-width: bold;*/
+    }
+
+    #titulo_reserva{
+      font-size: 40px;
+      font-weight: bold;
+      color:#8650fe;
+      position: absolute;
+    }
+
+    #form-checkout {
+      display: none;
+      height: auto;
+      flex-direction: column;
+      /*max-width: 600px;*/
+      position: absolute;
+      box-shadow: none;
+      border: 2px solid #3e139c;
+      z-index: 102;
+      left: 50%;
+      margin-left: -225px;
+      height: auto !important;
+    }
+
+    #form-checkout__submit{
+      color: white;
+      background: #23d366;
+    }
+
+    #info_reserva{
+      text-align: center;
+      width: 100%;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .datos_confirmacion{
+      width: 132px;
+      margin-top: 5px;
+      background: #8650fe;
+      color: white;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+      display: inline-flex;
+    }
+
+    #total{
+      width: 100% !important;
+    }
+
+    @media(max-width: 1200px){
+      #titulo_reserva{
+        position: relative;
+        text-align: center;
+      }
+    }
+
+    @media(max-width: 600px){
+      form, section{
+        width: 90%;
+      }
+
+      select, input, form, section{
+        font-size: 14px;
+      }
+
+      #form-checkout{
+        width: 100%;
+        height: 100%;
+        position: absolute !important;
+        margin-top: 0;
+        top: 0;
+        left: 0;
+        margin-left: 0;
+      }
+
+      .datos_confirmacion{
+        width: 32% !important;
+        font-size: 1rem !important;
+      }
+    }
+
+    @media(max-width: 400px){
+      #titulo_reserva{
+        font-size: 2.5rem;
+      }
+
+      select, input, form, section{
+        font-size: 12px;
+      }
+    }
+
+    @media(max-height: 500px){
+      .datos_confirmacion{
+        width: 32.8% !important;
+      }
+      #datos_tarjeta{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+
+      #form-checkout{
+        width: 100%;
+        left: 0;
+        margin-left: 0;
+        min-width: 700px !important;
+        position: absolute;
+        margin-top: 0;
+      }
+      .datos{
+        width: 48%;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <form id="form-checkout" action="/process_payment" method="post" class="modal">
+    <div class="nav_modal" style="margin-bottom: 20px">
+      <div class="texto_3 violeta_claro"><strong>Información de la tarjeta</strong></div>
+      <div id="cerrar_modal_admin_info" class="modal_cerrar cerrar">X</div>
+    </div>
+<!--    <div class="titulo_3 violeta_claro" style="width: 100%; margin-bottom: 10px">Completá los datos</div>-->
+    <div id="datos_tarjeta">
+      <div id="form-checkout__cardNumber" class="container datos"></div>
+      <div id="form-checkout__expirationDate" class="container datos"></div>
+      <div id="form-checkout__securityCode" class="container datos"></div>
+      <input type="text" id="form-checkout__cardholderName" class="container datos" required/>
+      <select id="form-checkout__issuer" class="container datos"></select>
+      <select hidden="hidden" id="form-checkout__installments" class="container datos"></select>
+      <select id="form-checkout__identificationType" class="container datos"></select>
+      <input type="text" id="form-checkout__identificationNumber" class="container datos" required/>
+      <input type="email" id="form-checkout__cardholderEmail" class="container datos" required/>
+    </div>
+    <br>
+    <button type="submit" id="form-checkout__submit" class="btn_reservar">Pagar</button>
+    <progress value="0" class="progress-bar" style="width: 100%">Cargando...</progress>
+    <div id="info_reserva" class="texto_2 violeta_oscuro">
+      <div class="datos_confirmacion"><span id="datos_dia_reserva"></span></div>
+      <div class="datos_confirmacion"><span id="datos_hora"></span></div>
+      <div class="datos_confirmacion"><span id="datos_cancha"></span></div>
+      <div class="datos_confirmacion" id="total"><span id="datos_total"></span></div>
+    </div>
+  </form>
+
+  <span id="modal_background_tarjeta" class="modal_background"></span>
+  <div th:if="${mensaje_excepcion}"class="error">
+    [[${mensaje_excepcion}]]
+  </div>
+
+  <nav th:replace="fragments/nav :: navOnline"></nav>
+  <div th:replace="fragments/nav :: navOnlineResponsive"></div>
+  <div th:replace="fragments/nav :: navOnlineDesplegable"></div>
+
+  <main>
+      <div th:if="${mensaje_error_reserva}" class="error" style="margin: -20px -20px 0px -20px">
+        [[${mensaje_error_reserva}]]
+      </div>
+
+      <div id="titulo_reserva">Hacé tu reserva</div>
+      <form id="form_reserva" th:action="@{/generarReserva}" method="post" th:object="${reserva}">
+        <table>
+          <tr>
+            <td>Dia </td>
+            <td>
+              <select th:field="*{dia}" id="selectDia" class="filtro container">
+                <option th:each="d :${dias}" th:value="${d.getKey()}" type="date">[[${d.getValue()}]]</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Cancha</td>
+            <td>
+              <select th:field="*{id_cancha}" id="selectCancha" class="filtro container">
+                <option value="" selected="selected">Seleccionar cancha</option>
+                <option value="1" th:type="Long">F5 A</option>
+                <option value="2" th:type="Long">F5 B</option>
+                <option value="3" th:type="Long">F7 A</option>
+                <option value="4" th:type="Long">F7 B</option>
+                <option value="5" th:type="Long">F8 A</option>
+                <option value="6" th:type="Long">F8 B</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Hora</td>
+            <td>
+              <select th:field="*{hora}" id="selectHorario" disabled="disabled" class="container">
+                <option value="" selected="selected">Seleccionar horario</option>
+              <!-- Los horarios se generan automáticamente con filtrarHorarios.js-->
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2">
+              <input type="button" value="Reservar" disabled="disabled" id="btn_reservar" class="btn_bloqueado btn_reservar container">
+            </td>
+          </tr>
+        </table>
+      </form>
+      <section style="font-weight: bold">
+        <div style="margin-bottom: 15px">Descuento por nivel: <span style="color: rgb(35,211,102)" id="descuento">[[${#numbers.formatDecimal(nivel.getDescuento() * 100, 0, 0)}]]%</span></div>
+        <div>Total: <span style="color: rgb(35,211,102)" id="precio_final">$0,00</span></div>
+      </section>
+  </main>
+  <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+
+</html>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script th:src="@{/js/precioReserva.js}"></script>
+<script th:src="@{/js/navDesplegable.js}"></script>
+<script th:src="@{/js/filtrarHorarios.js}"></script>
+
+<script>
+  const mp = new MercadoPago("TEST-51a55062-a83d-4154-b6a0-5e6e3657799d");
+  // const mp = new MercadoPago("APP_USR-a79efc78-57b5-4c6c-a782-3f9743c276ca");
+
+  //TORINOFUTBOLAPP
+  // const mp = new MercadoPago("APP_USR-27439500-cb5c-4c18-8bd9-50b993ec9bfa");
+  // const mp = new MercadoPago("TEST-8a417029-0961-4c33-9e37-fd405de2d27f");
+
+  const cardForm = mp.cardForm({
+    amount: "10.5",
+    iframe: true,
+    form: {
+      id: "form-checkout",
+      cardNumber: {
+        id: "form-checkout__cardNumber",
+        placeholder: "Numero de tarjeta",
+      },
+      expirationDate: {
+        id: "form-checkout__expirationDate",
+        placeholder: "Vencimiento MM/YY",
+      },
+      securityCode: {
+        id: "form-checkout__securityCode",
+        placeholder: "Código de seguridad",
+      },
+      cardholderName: {
+        id: "form-checkout__cardholderName",
+        placeholder: "Titular de la tarjeta",
+      },
+      issuer: {
+        id: "form-checkout__issuer",
+        placeholder: "Banco emisor",
+      },
+      installments: {
+        id: "form-checkout__installments",
+        placeholder: "Cuotas",
+      },
+      identificationType: {
+        id: "form-checkout__identificationType",
+        placeholder: "Tipo de documento",
+      },
+      identificationNumber: {
+        id: "form-checkout__identificationNumber",
+        placeholder: "Número del documento",
+      },
+      cardholderEmail: {
+        id: "form-checkout__cardholderEmail",
+        placeholder: "E-mail",
+      },
+    },
+    callbacks: {
+      onFormMounted: error => {
+        if (error) return console.warn("Form Mounted handling error: ", error);
+        console.log("Form mounted");
+      },
+      onSubmit: event => {
+        event.preventDefault();
+
+        const {
+          paymentMethodId: payment_method_id,
+          issuerId: issuer_id,
+          cardholderEmail: email,
+          amount,
+          token,
+          installments,
+          identificationNumber,
+          identificationType,
+        } = cardForm.getCardFormData();
+
+        fetch("/process_payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token,
+            issuer_id,
+            payment_method_id,
+            transaction_amount: Number(amount),
+            installments: Number(installments),
+            description: "Descripción del producto",
+            payer: {
+              email,
+              identification: {
+                type: identificationType,
+                number: identificationNumber,
+              },
+            },
+          }),
+        })
+                .then(response => {
+                  if(!response.ok) {
+                    window.location.href = "/errorReserva";
+                  }
+                  else{
+                    document.getElementById("form_reserva").submit();
+                  }
+                });
+      },
+      onFetching: (resource) => {
+        console.log("Fetching resource: ", resource);
+
+        // Animate progress bar
+        const progressBar = document.querySelector(".progress-bar");
+        progressBar.removeAttribute("value");
+        return () => {
+          progressBar.setAttribute("value", "0");
+        };
+      }
+    },
+  });
+
+  let dia = document.getElementById("selectDia");
+  let cancha = document.getElementById("selectCancha");
+  let hora = document.getElementById("selectHorario");
+  let btn_reservar = document.getElementById("btn_reservar")
+  let filtros = document.querySelectorAll(".filtro");
+  let descuento = document.getElementById("descuento");
+  let precio_final = document.getElementById("precio_final");
+  let formTarjeta = document.getElementById("form-checkout");
+  let backgroundTarjeta = document.getElementById("modal_background_tarjeta");
+
+  //Cuando cambie el cualquier filtro de selección, actualizo los horarios
+  //y los valores del modal de la tarjeta
+  filtros.forEach(function(filtro){
+    filtro.addEventListener('change', ()=>{
+      cargarReservasDia(dia.value, cancha.value);
+      document.getElementById("datos_cancha").innerHTML = cancha.options[cancha.selectedIndex].text;
+      document.getElementById("datos_dia_reserva").innerHTML = dia.options[dia.selectedIndex].text;
+    })
+  })
+
+
+  document.querySelector(".cerrar").addEventListener('click', ()=>{
+    backgroundTarjeta.style.display = "none";
+    formTarjeta.style.display = "none";
+  })
+
+  //Cuando cambie el filtro de la hora, poner el horario en el modal de confirmación
+  //con los datos de la tarjeta
+  hora.addEventListener('change', ()=>{
+    document.getElementById("datos_hora").innerHTML = hora.value;
+  });
+
+  //Contar cuantos options quedan en el select de la hora para cada día
+  async function contarNodosHora() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(hora.childElementCount);
+      }, 200);
+    });
+  }
+
+  //Si el botón está habilitado y lo clickeo, me muestra el formulario de tarjeta
+  btn_reservar.addEventListener('click', ()=>{
+    if(btn_reservar.className.includes("btn_habilitado")){
+      backgroundTarjeta.style.display = "flex";
+      formTarjeta.style.display = "flex";
+    }
+  })
+
+  //Si la cancha no está seleccionada, deshabilito la hora y el botón de enviar
+  cancha.addEventListener('change', ()=>{
+    if(cancha.value == ""){
+      hora.setAttribute("disabled", "");
+      btn_reservar.setAttribute("disabled", "");
+      btn_reservar.className = "btn_bloqueado";
+    }
+    else{
+      hora.removeAttribute("disabled");
+      contarNodosHora().then(function(result){
+        if(parseInt(result) > 0){
+          btn_reservar.removeAttribute("disabled");
+          btn_reservar.className = "btn_habilitado container btn_reservar";
+          calcularPrecioReserva(cancha.value)
+        }
+        else{
+          //Si selecciono cancha pero no hay horarios disponibles, inhabilito el boton
+          btn_reservar.setAttribute("disabled", "");
+          btn_reservar.className = "btn_bloqueado";
+        }
+      })
+    }
+  })
+</script>

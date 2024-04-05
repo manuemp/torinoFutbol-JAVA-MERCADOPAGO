@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+  <link rel="stylesheet" th:href="@{/css/general.css}">
+  <link rel="stylesheet" th:href="@{/css/modal.css}">
+  <link rel="stylesheet" th:href="@{/css/contacto.css}">
+  <title>Torino Fútbol: Contacto</title>
+
+  <style>
+    @media(max-width: 650px){
+      #contacto{
+        width: 95%;
+        margin-top: 60px;
+      }
+
+      #whatsapp_contacto{
+        font-size: 1.2rem;
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+<span id="modal_background"></span>
+
+<nav th:replace="fragments/nav :: navOffline"></nav>
+<div th:replace="fragments/nav :: navOfflineResponsive"></div>
+<div th:replace="fragments/nav :: navOfflineDesplegable"></div>
+
+<main>
+  <div class="exito" th:if="${mensaje_exito}">
+    [[${mensaje_exito}]]
+  </div>
+
+  <a th:href="@{/}"><img src="./imgs/left_arrow2.png" alt="Volver" id="arrow"></a>
+  <!-- MODAL -->
+  <div id="modal_inicio_sesion">
+    <div class="modal_nav">
+      <span class="modal_cerrar">X</span>
+    </div>
+  </div>
+  <article id="contacto">
+    <div id="header_contacto">
+      <h1>Contacto TorinoFútbol</h1>
+      <p style="color: white; font-weight: bold">¿Tenés alguna consulta? ¡No dudes en escribirnos!</p>
+    </div>
+    <div id="body_contacto">
+      <form th:action="@{/mail/send}" th:method="post" th:object="${mensaje}">
+        <label for="nombre_contacto">Nombre y Apellido</label>
+        <input class="input_contacto" type="text" name="nombre_contacto" id="nombre_contacto" th:field="*{nombre}" autocomplete="off" required>
+        <label for="email_contacto">Email</label>
+        <input class="input_contacto" type="email" name="email_contacto" id="email_contacto"  th:field="*{email}" autocomplete="off" required>
+        <label for="mensaje_contacto">Mensaje</label>
+        <textarea name="mensaje" id="mensaje_contacto" th:field="*{mensaje}" cols="30" rows="10"></textarea>
+        <input type="submit" id="enviar_contacto">
+      </form>
+    </div>
+  </article>
+  <article id="whatsapp_contacto">
+    ¡Recordá que también podés comunicarte con nosotros vía Whatsapp al <a href="https://wa.me/1159807762/?text=Hola!%20Quiero%20hacer%20una%20consulta%20sobre%20TorinoFutbol" target="_blank">1159807762</a>!
+  </article>
+</main>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
+
+<script th:src="@{/js/navDesplegable.js}"></script>
+
+<script>
+</script>

@@ -1,0 +1,131 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/general.css}">
+  <link rel="stylesheet" th:href="@{/css/registro.css}">
+  <style th:inline="text">
+    @media (min-width: 1450px){
+      form
+      {
+        width: 500px;
+      }
+    }
+
+    @media( max-width: 1236px){
+      .form_container
+      {
+        justify-content: center;
+      }
+
+      #titulo_registro
+      {
+        width: fit-content;
+        margin: 30px auto;
+      }
+    }
+
+    @media(max-width: 950px){
+      form
+      {
+        width: 90%;
+      }
+      #titulo_registro
+      {
+        font-size: 2.4rem;
+      }
+    }
+
+    @media(max-width: 600px){
+      .img_container
+      {
+        display: none;
+      }
+
+      .registro_container
+      {
+        width: 100%;
+        background-image: url([[@{/imgs/jugador_pelota11violeta.png}]]);
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      form
+      {
+        width: 70%;
+      }
+
+      #titulo_registro {
+        font-size: 2rem;
+        margin-top: 50px;
+      }
+
+      .logo{
+        right: 6px;
+      }
+    }
+
+  </style>
+  <title>Torino Fútbol: Registro</title>
+</head>
+<body>
+<th:block th:if="${mensaje_error}">
+  <div class="error">[[${mensaje_error}]]</div>
+</th:block>
+<main>
+  <div style="display: block;">
+    <a th:href="@{/home}"><img th:src="@{/imgs/left_arrow2.png}" alt="Volver" id="arrow"></a>
+    <img th:src="@{/imgs/torinoLogoBlanco_2.png}" class="logo" alt="logoTorino">
+  </div>
+  <div class="registro_container">
+    <form th:action="@{/process_register}" method="post" th:object="${user}">
+    <div>
+      <p id="titulo_registro">Registrate, jugá en<br>las mejores canchas</p>
+    </div>
+    <div class="form_container">
+
+      <div class="form_opcion">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form_input" id="nombre" th:field="*{nombre}" autocomplete="off" name="nombre" required>
+<!--        <span style="color:red;font-weight:bold;font-style:italic"><?php echo $nombre_err ?></span>-->
+      </div>
+
+      <div class="form_opcion">
+        <label for="apellido">Apellido</label>
+        <input type="text" class="form_input" id="apellido" th:field="*{apellido}" autocomplete="off" name="apellido" required>
+<!--        <span style="color:red;font-weight:bold;font-style:italic"><?php echo $apellido_err ?></span>-->
+      </div>
+
+      <div class="form_opcion">
+        <label for="email">Correo Electrónico</label>
+        <input type="email" class="form_input" id="email" autocomplete="off" name="email" th:field="*{email}" required>
+<!--        <span style="color:red;font-weight:bold;font-style:italic;"><?php echo $email_err ?></span>-->
+      </div>
+
+      <div class="form_opcion">
+        <label for="repetirPass">Telefono</label>
+        <input type="text" class="form_input" id="telefono" autocomplete="off" th:field="*{telefono}" required>
+      </div>
+
+      <div class="form_opcion">
+        <label for="pass">Contraseña</label>
+        <input type="password" class="form_input" id="pass" th:field="*{pass}" autocomplete="off" name="pass" required>
+      </div>
+
+      <div class="form_opcion">
+        <label for="repetirPass">Repetir Contraseña</label>
+        <input type="password" class="form_input" id="repetirPass" autocomplete="off" th:name="repetirPass" required>
+      </div>
+
+
+      <input type="submit" name="enviar" id="enviar" value="Registrarme" class="form_input form_opcion">
+    </div>
+    </form>
+  </div>
+  <div class="img_container">
+  </div>
+</main>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

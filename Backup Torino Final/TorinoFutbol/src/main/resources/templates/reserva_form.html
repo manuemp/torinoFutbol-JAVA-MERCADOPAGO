@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+  <link rel="stylesheet" th:href="@{/css/general.css}">
+  <link rel="stylesheet" th:href="@{/css/modal.css}">
+  <link rel="stylesheet" th:href="@{/css/historial.css}">
+  <title>Torino Fútbol: Reservá las mejores canchas</title>
+  <style th:inline="text">
+
+    .navbar_desplegable{
+      margin-top: 55px;
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main{
+      flex: 1;
+      padding: 20px;
+    }
+
+    select, input{
+      height: 35px;
+      width: 100%;
+      padding: 5px;
+      border-radius: 8px;
+      margin-top: 10px;
+      background-color: whitesmoke;
+      font-size: 20px;
+    }
+
+    input{
+      border: none;
+    }
+
+    form, section{
+      width: 450px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      /* align-content: center; */
+      align-items: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 5px 6px 7px 1px lightgray;
+      font-size: 20px;
+      position: relative;
+      box-sizing: border-box;
+      margin-top: 20px;
+    }
+
+    #btn_reservar{
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn_bloqueado{
+      background: gainsboro;
+      color: gray;
+    }
+
+    .btn_habilitado{
+      background: rgb(35,211,102);
+      color: white;
+    }
+
+    #titulo_reserva{
+      font-size: 40px;
+      font-weight: bold;
+      color:#8650fe;
+      position: absolute;
+    }
+
+    @media(max-width: 1200px){
+      #titulo_reserva{
+        position: relative;
+        text-align: center;
+      }
+    }
+
+    @media(max-width: 600px){
+      form, section{
+        width: 90%;
+      }
+
+      select, input, form, section{
+        font-size: 14px;
+      }
+    }
+
+    @media(max-width: 400px){
+      #titulo_reserva{
+        font-size: 2.5rem;
+      }
+
+      select, input, form, section{
+        font-size: 12px;
+      }
+    }
+
+
+  </style>
+</head>
+<body>
+  <span id="modal_background"></span>
+  <div th:if="${mensaje_excepcion}"class="error">
+    [[${mensaje_excepcion}]]
+  </div>
+
+  <nav th:replace="fragments/nav :: navOnline"></nav>
+  <div th:replace="fragments/nav :: navOnlineResponsive"></div>
+  <div th:replace="fragments/nav :: navOnlineDesplegable"></div>
+
+  <main>
+      <div th:if="${mensaje_error_reserva}" class="error" style="margin: -20px -20px 0px -20px">
+        [[${mensaje_error_reserva}]]
+      </div>
+
+      <div id="titulo_reserva">Hacé tu reserva</div>
+      <form th:action="@{/generarReserva}" method="post" th:object="${reserva}">
+        <table>
+          <tr>
+            <td>Dia </td>
+            <td>
+              <select th:field="*{dia}" id="selectDia" class="filtro">
+                <option th:each="d :${dias}" th:value="${d.getKey()}" type="date">[[${d.getValue()}]]</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Cancha</td>
+            <td>
+              <select th:field="*{id_cancha}" id="selectCancha" class="filtro">
+                <option value="" selected="selected">Seleccionar cancha</option>
+                <option value="1" th:type="Long">F5 A</option>
+                <option value="2" th:type="Long">F5 B</option>
+                <option value="3" th:type="Long">F7 A</option>
+                <option value="4" th:type="Long">F7 B</option>
+                <option value="5" th:type="Long">F8 A</option>
+                <option value="6" th:type="Long">F8 B</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Hora</td>
+            <td>
+              <select th:field="*{hora}" id="selectHorario" disabled="disabled">
+                <option value="" selected="selected">Seleccionar horario</option>
+              <!-- Los horarios se generan automáticamente con filtrarHorarios.js-->
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2">
+              <input type="submit" value="Reservar" id="btn_reservar" disabled="disabled" class="btn_bloqueado">
+            </td>
+          </tr>
+        </table>
+      </form>
+      <section style="font-weight: bold">
+        <div style="margin-bottom: 15px">Descuento por nivel: <span style="color: rgb(35,211,102)" id="descuento">[[${#numbers.formatDecimal(nivel.getDescuento() * 100, 0, 0)}]]%</span></div>
+        <div>Total: <span style="color: rgb(35,211,102)" id="precio_final">$0,00</span></div>
+      </section>
+  </main>
+  <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+
+</html>
+<script th:src="@{/js/precioReserva.js}"></script>
+<script th:src="@{/js/navDesplegable.js}"></script>
+<script th:src="@{/js/filtrarHorarios.js}"></script>
+
+<script>
+  let dia = document.getElementById("selectDia");
+  let cancha = document.getElementById("selectCancha");
+  let hora = document.getElementById("selectHorario");
+  let btn_reservar = document.getElementById("btn_reservar")
+  let filtros = document.querySelectorAll(".filtro");
+  let descuento = document.getElementById("descuento");
+  let precio_final = document.getElementById("precio_final");
+
+  filtros.forEach(function(filtro){
+    filtro.addEventListener('change', ()=>{
+      cargarReservasDia(dia.value, cancha.value);
+    })
+  })
+
+  async function contarNodosHora() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(hora.childElementCount);
+      }, 200);
+    });
+  }
+
+  cancha.addEventListener('change', ()=>{
+    if(cancha.value == ""){
+      hora.setAttribute("disabled", "");
+      btn_reservar.setAttribute("disabled", "");
+      btn_reservar.className = "btn_bloqueado";
+    }
+    else{
+      hora.removeAttribute("disabled");
+      contarNodosHora().then(function(result){
+        if(parseInt(result) > 0){
+          btn_reservar.removeAttribute("disabled");
+          btn_reservar.className = "btn_habilitado";
+          calcularPrecioReserva(cancha.value)
+        }
+        else{
+          btn_reservar.setAttribute("disabled", "");
+          btn_reservar.className = "btn_bloqueado";
+        }
+      })
+    }
+  })
+</script>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TorinoFutbol: Hacé tu reserva</title>
+  <link rel="stylesheet" th:href="@{/css/general.css}">
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+  <link rel="stylesheet" th:href="@{/css/historial.css}">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/modal.css}">
+  <!--  <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootrstap.min.css">-->
+  <style>
+    body{
+      background: white;
+    }
+    #titulo_reservas_admin{
+      margin-left: 20px;
+    }
+    .item_responsive{
+      top: -10px;
+      position: relative;
+      display: none;
+    }
+    .botonera{
+      width: 205px;
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+
+    @media(max-width: 1100px){
+      .input_admin{
+        width: 15%;
+        font-size: 10px;
+      }
+    }
+
+    @media (max-width: 900px){
+      .td_historial{
+        font-size: 10px;
+      }
+
+      .boton_falta, .boton_asistio{
+        margin-left: 5px;
+        font-size: 12px;
+        width: 62px;
+      }
+    }
+
+    @media (max-width: 850px){
+      .modal_admin, #modal_admin_confirmar_eliminar, #modal_admin_confirmar_falta, #modal_info_usuario{
+        width: 100%;
+        /*height: 100%;*/
+        top: 20%;
+        left: 0;
+        margin-left: 0;
+        margin-top:0;
+        /*border: none;*/
+        border-raidus: 0;
+      }
+
+      .botones{
+        display: none;
+      }
+
+      .item_historial, .th_historial{
+        justify-content: left;
+      }
+
+      .item_responsive{
+        display: flex;
+      }
+
+      .boton_asistio, .boton_falta{
+        width: 50px;
+        height: 30px;
+        font-size: 10px;
+      }
+
+      .boton_eliminar{
+        width: 10px;
+        height: 10px;
+      }
+
+      .icono_eliminar{
+        height: 15px;
+      }
+
+    }
+
+    @media(max-width: 600px){
+
+      .id{
+        display: none;
+      }
+
+      .email{
+        width: 230px;
+        /*width: 30%;*/
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        line-height: 5.7;
+        text-align: left;
+      }
+
+      .dia, .hora{
+        width: 30%;
+      }
+
+      .cancha{
+        display: none;
+      }
+
+      .input_admin{
+        font-size: 10px;
+        width: 130px;
+        margin-right: 0px;
+      }
+    }
+
+    @media(max-width: 450px){
+      .filtros_historial{
+        padding-left: 5px;
+      }
+
+      #filtro_id_email_admin{
+        margin-left: 5px;
+        height: 60px;
+      }
+
+      #titulo_reservas_admin{
+        margin-left: 5px;
+        font-size: 2rem;
+      }
+
+      .email{
+        width: 120px;
+      }
+
+      /*.dia, .hora{*/
+      /*  width: 23%;*/
+      /*}*/
+
+      .input_admin{
+        font-size: 10px;
+        width: 100px;
+        margin-right: 0px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="modal_background" id="modal_background_email"></div>
+<div class="modal_background" id="modal_background_id"></div>
+<div class="modal_background" id="modal_background_confirmar"></div>
+<div class="modal_background" id="modal_background_info"></div>
+
+
+  <nav th:replace="fragments/nav :: navAdmin"></nav>
+  <nav th:replace="fragments/nav :: navAdminResponsive"></nav>
+  <nav th:replace="fragments/nav :: navAdminDesplegable"></nav>
+
+  <!-- MODALES -->
+  <div th:replace="fragments/modal :: modalAdminBuscarEmail"></div>
+  <div th:replace="fragments/modal :: modalAdminBuscarID"></div>
+  <div th:replace="fragments/modal :: modalAdminConfirmarEliminar"></div>
+  <div th:replace="fragments/modal :: modalAdminConfirmarFalta"></div>
+  <div th:replace="fragments/modal :: modalAdminInfoUsuario"></div>
+  <!-- MODALES -->
+
+  <main>
+    <h1 class="titulo_2 violeta_claro" id="titulo_reservas_admin">Reservas Pendientes</h1>
+    <div id="filtro_id_email_admin">
+      <button class="input_admin boton_filtro_admin" id="admin_buscar_id">Buscar por ID</button>
+      <button class="input_admin boton_filtro_admin" id="admin_buscar_email" value="email">Buscar por Email</button>
+    </div>
+    <table id="tablaReservas">
+      <thead style="background-color:white; position:sticky; z-index:2">
+        <tr class="filtros_historial" id="filtros_historial">
+          <th colspan="6" style="width: 100%; text-align: left">
+            <input type="text" placeholder="Email" id="inputEmail" class="filtro input_admin">
+
+            <select id="selectCancha" class="filtro input_admin">
+              <option value="" selected="selected">Cancha</option>
+              <option value="1">F5 A</option>
+              <option value="2">F5 B</option>
+              <option value="3">F7 A</option>
+              <option value="4">F7 B</option>
+              <option value="5">F8 A</option>
+              <option value="6">F8 B</option>
+            </select>
+
+            <select id="selectDia" class="filtro input_admin">
+              <option value="" selected="selected">Dia</option>
+              <th:block>
+                <option th:each="d :${dias}" th:value="${d.key}" class="opcionDia">[[${d.value}]]</option>
+              </th:block>
+            </select>
+          </th>
+        </tr>
+        <tr class="th_historial">
+          <th class="td_historial id">ID</th>
+          <th class="td_historial email">Email</th>
+          <th class="td_historial cancha">Cancha</th>
+          <th class="td_historial dia">Dia</th>
+          <th class="td_historial hora">Hora</th>
+          <th class="td_historial botones"></th>
+        </tr>
+      </thead>
+      <tbody>
+<!--        <tr class="item_historial">-->
+<!--          <td class='td_historial id'> 32 </td>-->
+<!--          <td class='td_historial email'> mpedro823@alumnos.frh.utn.edu.ar</td>-->
+<!--          <td class='td_historial cancha'> F7 A </td>-->
+<!--          <td class='td_historial dia'> 11/04/2024 </td>-->
+<!--          <td class='td_historial hora'> 17:00:00hs   </td>-->
+<!--          <td class='td_historial botones'>-->
+<!--            <div class='boton_asistio'>ASISTIO</div>-->
+<!--            <div class='boton_falta'>FALTA</div>-->
+<!--            <div class='boton_eliminar'><img src='../imgs/eliminar.png' class='icono_eliminar' alt=''></div>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--        <tr class="item_historial item_responsive">-->
+<!--          <td>-->
+<!--            <div class="botonera">-->
+<!--              <div class='boton_asistio'>ASISTIO</div>-->
+<!--              <div class='boton_falta'>FALTA</div>-->
+<!--              <div class='boton_eliminar'><img src='../imgs/eliminar.png' class='icono_eliminar' alt=''></div>-->
+<!--            </div>-->
+<!--          </td>-->
+<!--        </tr>-->
+
+
+<!--        <tr class="item_historial">-->
+<!--          <td class='td_historial id'> 32 </td>-->
+<!--          <td class='td_historial email'> mpedro823@alumnos.frh.utn.edu.ar</td>-->
+<!--          <td class='td_historial cancha'> F7 A </td>-->
+<!--          <td class='td_historial dia'> 11/04/2024 </td>-->
+<!--          <td class='td_historial hora'> 17:00:00hs   </td>-->
+<!--          <td class='td_historial botones'>-->
+<!--            <div class='boton_asistio'>ASISTIO</div>-->
+<!--            <div class='boton_falta'>FALTA</div>-->
+<!--            <div class='boton_eliminar'><img src='../imgs/eliminar.png' class='icono_eliminar' alt=''></div>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--        <tr class="item_historial item_responsive">-->
+<!--          <td>-->
+<!--            <div class="botonera">-->
+<!--              <div class='boton_asistio'>ASISTIO</div>-->
+<!--              <div class='boton_falta'>FALTA</div>-->
+<!--              <div class='boton_eliminar'><img src='../imgs/eliminar.png' class='icono_eliminar' alt=''></div>-->
+<!--            </div>-->
+<!--          </td>-->
+<!--        </tr>-->
+      </tbody>
+    </table>
+  </main>
+</body>
+
+<script th:src="@{/js/navDesplegable.js}"></script>
+<script th:src="@{/js/jquery/jquery.min.js}"></script>
+<script th:src="@{/js/buscarReservas.js}"></script>
+<script th:src="@{/js/reservasPendientes.js}"></script>
+<script th:src="@{/js/admin.js}"></script>
+<script>
+
+  let modal_email = document.getElementById("modal_admin_buscar_email");
+  let modal_id = document.getElementById("modal_admin_buscar_id");
+  let modales = document.querySelectorAll(".modal_admin");
+  let cerrar_modal = document.querySelectorAll(".cerrar");
+  let modales_abiertos = 0;
+
+  cerrar_modal.forEach((cerrar)=>{
+    cerrar.addEventListener('click', (e)=>{
+      let parent = e.target.parentElement.parentElement;
+      let attrParent = parent.getAttribute("data-background-modal");
+      parent.style.display = "none";
+      document.getElementById(`modal_background_${attrParent}`).style.display = "none";
+    })
+  })
+
+  document.getElementById("admin_buscar_email").addEventListener('click', (ev)=>{
+    document.getElementById("modal_background_email").style.display = "block"
+    modal_email.style.display = "block";
+  })
+
+  document.getElementById("admin_buscar_id").addEventListener('click', ()=>{
+    modales_abiertos++;
+    document.getElementById("modal_background_id").style.display = "block";
+    modal_id.style.display = "block";
+  })
+
+  let filtros = document.querySelectorAll(".filtro");
+  let dia = document.getElementById("selectDia");
+  let cancha = document.getElementById("selectCancha");
+  let email = document.getElementById("inputEmail");
+
+  filtros.forEach(function(filtro){
+    filtro.addEventListener('change', ()=>{
+      cargarReservasPendientes(dia.value, cancha.value, email.value);
+    })
+    filtro.addEventListener('keyup', ()=>{
+      cargarReservasPendientes(dia.value, cancha.value, email.value);
+    })
+  })
+
+  document.getElementById("info_usuario").addEventListener('click', ()=>{
+      let email = document.getElementById("buscar_reserva_email").value;
+      infoUsuario(email);
+    }
+  )
+
+</script>
+</html>
