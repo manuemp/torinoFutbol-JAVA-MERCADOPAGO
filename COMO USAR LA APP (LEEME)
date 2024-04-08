@@ -1,0 +1,41 @@
+///////////////////////////////////////////////////////////////////////////////
+// EN CASO DE QUERER PROBAR LA APP SE NECESITA ACTIVAR UN SERVIDOR EN LOCAL //
+/////////////////////////////////////////////////////////////////////////////
+
+TorinoFutbol es un proyecto universitario, en el que presento cómo podría pensarse un sistema de gestión de turnos para un complejo de canchas de fútbol.
+Por cada usuario se llevará un conteo de la cantidad de reservas que realizó, y dependiendo de dicha cantidad, podrá acceder a beneficios en el complejo y en el precio de las canchas.
+
+Se presentan tres niveles a los que puede acceder un usuario según su cantidad de reservas: 
+Recreativo -> Menos de 15 (no hay beneficios)
+Local -> Entre 15 y 40
+Socio -> Más de 40 
+
+Los usuarios que falten o cancelen su reserva fuera del tiempo reglamentario tendrán una falta, la cual se contabilizará al igual que las reservas.
+Si un usuario excede las 3 faltas sufrirá una baja de nivel, y por ende, la pérdida de los beneficios que le correspondían en el mismo.
+
+El administrador tendrá un panel en el que se encargará de aplicar las faltas a los usuarios, o de registrar que pagaron y asistieron, como también de eliminar la reserva.
+La diferencia entre la eliminación de una reserva y la aplicación de una falta, es que en el primer caso se pueden contemplar situaciones en las que el usuario estará imposibilitado a jugar
+y no corresponde asignarle una falta; por ejemplo, una lluvia torrencial en una cancha destechada.
+
+Los pagos se realizan mediante la API de MercadoPago. Está habilitado el uso de credenciales de prueba, y también funcionan pagos con credenciales reales (se debitan $40 en caso de querer probar)
+
+Credenciales de prueba:
+
+MasterCard
+5031 7557 3453 0604
+Vto: 11/25
+Cod: 123
+DNI: 12345678
+
+Visa:
+4509 9535 6623 3704
+Vto: 11/25
+Cod: 123
+DNI: 12345678
+
+American Express:
+3711 803032 57522
+Vto: 11/25
+Cod: 1234
+DNI: 12345678
+
