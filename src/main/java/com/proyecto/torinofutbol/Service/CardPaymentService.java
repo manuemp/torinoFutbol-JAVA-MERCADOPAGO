@@ -26,8 +26,8 @@ import java.math.BigDecimal;
 @Service
 public class CardPaymentService {
 //    @Value("${mercado_pago_sample_access_token}")
-    @Value("TEST-2454211397602545-012810-a231c9e4443c6f687409dadcd4abd8f5-115251485")
-//    @Value("APP_USR-2454211397602545-012810-f4969b3234161813c5c29e657c0ccfac-115251485")
+//    @Value("TEST-2454211397602545-012810-a231c9e4443c6f687409dadcd4abd8f5-115251485")
+    @Value("APP_USR-2454211397602545-012810-f4969b3234161813c5c29e657c0ccfac-115251485")
     //VALUE TORINOFUTBOLAPP
 //    @Value("APP_USR-4091602927557442-012908-7f27999d2c3ce25437c7ad829c0aba7f-1656286779")
 //    @Value("TEST-4091602927557442-012908-06ba9d0cf4ca639bce34cbde4f4ba241-1656286779")
@@ -46,7 +46,7 @@ public class CardPaymentService {
 
             PaymentCreateRequest paymentCreateRequest =
                     PaymentCreateRequest.builder()
-                            .transactionAmount(BigDecimal.valueOf(20))
+                            .transactionAmount(BigDecimal.valueOf(40))
                             .token(cardPaymentDTO.getToken())
                             .description(cardPaymentDTO.getProductDescription())
                             .installments(cardPaymentDTO.getInstallments())
